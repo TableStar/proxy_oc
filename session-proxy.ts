@@ -27,7 +27,13 @@ Bun.serve({
       duplex: "half",
     });
 
-    return new Response(res.body, { status: res.status, headers: res.headers });
+    // return new Response(res.body, { status: res.status, headers: res.headers });
+    
+    const outHeaders = new Headers(res.headers)
+    outHeaders.delete('content-encoding')
+    outHeaders.delete('content-length')
+    outHeaders.delete('transfer-encoding')
+    return new Response(res.body, { status: res.status, headers:outHeaders });
   },
 });
 
