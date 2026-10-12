@@ -35,6 +35,10 @@ Bun.serve({
     outHeaders.delete('transfer-encoding')
     return new Response(res.body, { status: res.status, headers:outHeaders });
   },
+  error(err) {
+    console.error(`[proxy] upstream failed: ${err}`);
+    return new Response("upstream unavailable", { status: 502 });
+  },
 });
 
 console.log(`Session proxy on :8787 -> ${TARGET} [${sessionId}]`);
