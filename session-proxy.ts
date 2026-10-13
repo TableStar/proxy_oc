@@ -12,6 +12,8 @@ setInterval(
 
 Bun.serve({
   port: 8787,
+  // default 10s kills streaming responses mid-flight; proxy streams can be quiet for minutes
+  idleTimeout: 0,
   async fetch(req) {
     const url = new URL(req.url);
     const targetUrl = TARGET + url.pathname + url.search;
@@ -25,6 +27,7 @@ Bun.serve({
       headers,
       body: ["GET", "HEAD"].includes(req.method) ? undefined : req.body,
       duplex: "half",
+      verbose: true,
     });
 
     // return new Response(res.body, { status: res.status, headers: res.headers });
